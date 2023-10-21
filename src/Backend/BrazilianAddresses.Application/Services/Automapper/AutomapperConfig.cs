@@ -16,6 +16,10 @@ namespace BrazilianAddresses.Application.Services.Automapper
             MapperIBGEUpdateRequest();
 
             MapperGETAddresses();
+
+            MapperRemoveAddress();
+
+            MapperCreateUser();
         }
 
         private void MapperIBGEUpdateRequest()
@@ -29,9 +33,28 @@ namespace BrazilianAddresses.Application.Services.Automapper
             CreateMap<IBGE, AddressResponseJson>()
                 .ForMember(f => f.IBGECode, opt => opt.MapFrom(m => m.IBGECode))
                 .ForMember(f => f.State, opt => opt.MapFrom(m => m.State))
-                .ForMember(f => f.City, opt => opt.MapFrom(m => m.City))
-                .ForMember(f => f.CreationDate, opt => opt.MapFrom(m => m.CreationDate))
-                .ForMember(f => f.UpdateDate, opt => opt.MapFrom(m => m.UpdateDate));
+                .ForMember(f => f.City, opt => opt.MapFrom(m => m.City));
+
+            CreateMap<CityAddressRequestJson, CityAddressRequestJson>()
+                .ForMember(f => f.City, opt => opt.MapFrom(m => m.City.ToLower().Trim()));
+        }
+
+        private void MapperRemoveAddress()
+        {
+            CreateMap<IBGE, IBGE>()
+                .ForMember(f => f.DeletionDate, opt => opt.MapFrom(m => DateTime.Now))
+                .ForMember(f => f.UpdateDate, opt => opt.MapFrom(m => DateTime.Now));
+        }
+
+        private void MapperCreateUser()
+        {
+            CreateMap<UserRequestJson, User>()
+                .ForMember(f => f.Email, opt => opt.MapFrom(m => m.Email))
+                .ForMember(r => r.Password, config => config.Ignore())
+                .ForMember(r => r.Salt, config => config.Ignore())
+                .ForMember(f => f.Role, opt => opt.MapFrom(m => m.UserRole))
+                .ForMember(f => f.CreationDate, opt => opt.MapFrom(m => DateTime.Now))
+                .ForMember(f => f.UpdateDate, opt => opt.MapFrom(m => DateTime.Now));
         }
     }
 }

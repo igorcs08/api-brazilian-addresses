@@ -4,7 +4,7 @@ using BrazilianAddresses.Domain.Repositories.IBGERepository;
 
 namespace BrazilianAddresses.Infrastructure.RepositoryAccess.Repository
 {
-    public class IBGERepository : IIBGEReadOnlyRepository, IIBGEWriteOnlyRepository, IIBGEUpdateOnlyRepository
+    public class IBGERepository : IIBGEReadOnlyRepository, IIBGEWriteOnlyRepository, IIBGEUpdateOnlyRepository, IIBGERemoveOnlyRepository
     {
         private readonly BrazilianAddressesContext _context;
 
@@ -20,12 +20,12 @@ namespace BrazilianAddresses.Infrastructure.RepositoryAccess.Repository
 
         public async Task<IBGE> GetIBGEByIBGECode(string ibgeCode)
         {
-            return await _context.IBGE.AsNoTracking().FirstOrDefaultAsync(u => u.IBGECode.Equals(ibgeCode));
+            return await _context.IBGE.AsNoTracking().FirstOrDefaultAsync(u => u.IBGECode.Equals(ibgeCode) && u.DeletionDate == null);
         }
 
         public async Task<IBGE> GetIBGEByIBGECodeToUpdate(string ibgeCode)
         {
-            return await _context.IBGE.FirstOrDefaultAsync(u => u.IBGECode.Equals(ibgeCode));
+            return await _context.IBGE.FirstOrDefaultAsync(u => u.IBGECode.Equals(ibgeCode) && u.DeletionDate == null);
         }
 
         public void Update(IBGE ibge)
@@ -33,9 +33,24 @@ namespace BrazilianAddresses.Infrastructure.RepositoryAccess.Repository
             _context.IBGE.Update(ibge);
         }
 
-        public async Task<List<IBGE>> GetAllIBGEAddress()
+        public async Task<List<IBGE>> GetAllIBGEAddresses()
         {
-            return await _context.IBGE.AsNoTracking().ToListAsync();
+            return await _context.IBGE.AsNoTracking().Where(ibge => ibge.DeletionDate == null).ToListAsync();
+        }
+
+        public void Remove(IBGE ibge)
+        {
+            _context.IBGE.Update(ibge);
+        }
+
+        public async Task<List<IBGE>> GetIBGEAddressesByState(string state)
+        {
+            return await _context.IBGE.AsNoTracking().Where(x => x.State == state && x.DeletionDate == null).ToListAsync();
+        }
+
+        public async Task<List<IBGE>> GetIBGEAddressByCity(string city)
+        {
+            return await _context.IBGE.AsNoTracking().Where(x => x.City.ToLower() == city && x.DeletionDate == null).ToListAsync();
         }
     }
 }

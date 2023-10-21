@@ -6,6 +6,10 @@ namespace BrazilianAddresses.Domain.Repositories.IBGERepository
     {
         Task<IBGE> GetIBGEByIBGECode(string ibgeCode);
 
-        Task<List<IBGE>> GetAllIBGEAddress();
+        Task<List<IBGE>> GetAllIBGEAddresses();
+
+        Task<List<IBGE>> GetIBGEAddressesByState(string state);
+
+        Task<List<IBGE>> GetIBGEAddressByCity(string city);
     }
 }
