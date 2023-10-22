@@ -189,6 +189,12 @@
   <data name="NO_EXISTING_CITY" xml:space="preserve">
     <value>The city entered is not registered.</value>
   </data>
+  <data name="LOGIN_COMPLETED" xml:space="preserve">
+    <value>Login successfully completed.</value>
+  </data>
+  <data name="LOGIN_ERROR" xml:space="preserve">
+    <value>Email or password is incorrect.</value>
+  </data>
   <data name="NO_EXISTING_CODE" xml:space="preserve">
     <value>The city code entered is not registered.</value>
   </data>
@@ -200,5 +206,11 @@
   </data>
   <data name="USER_CREATED" xml:space="preserve">
     <value>User created successfully.</value>
+  </data>
+  <data name="TOKEN_EXPIRED" xml:space="preserve">
+    <value>Token is expired.</value>
+  </data>
+  <data name="USER_UNAUTHORIZED" xml:space="preserve">
+    <value>User is not authorized to access the method.</value>
   </data>
 </root>
